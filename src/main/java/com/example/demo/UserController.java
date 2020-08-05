@@ -21,11 +21,16 @@ public class UserController {
             @RequestParam(required = true,defaultValue = "1",name = "page") int page,
             @RequestParam(required = true,defaultValue = "10",name = "item_per_page") int itemPerPage){
         PagingResponse pagingResponse = new PagingResponse(page,itemPerPage);
-        List<UsersResponse> users = new ArrayList<>();
-        for (int i = 1; i < itemPerPage+1; i++) {
-            users.add(new UsersResponse(i+((page-1)*itemPerPage),"User "+((page-1)*itemPerPage)));
+        List<UsersResponse> usersResponseList = new ArrayList<>();
+
+        Iterable<User> users =  userRepository.findAll();
+        for(User user: users){
+            usersResponseList.add(new UsersResponse(user.getId(),user.getName()));
         }
-        pagingResponse.setUsersResponses(users);
+//        for (int i = 1; i < itemPerPage+1; i++) {
+//            usersResponseList.add(new UsersResponse(i+((page-1)*itemPerPage),"User "+((page-1)*itemPerPage)));
+//        }
+        pagingResponse.setUsersResponses(usersResponseList);
         return pagingResponse;
     }
 
