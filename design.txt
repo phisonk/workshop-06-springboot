@@ -1,0 +1,23 @@
+http://localhost:8080/users
+GET /users
+Response code = 200
+[
+    {
+        "id": 1,
+        "name": "User 1"
+    },
+    {
+        "id": 2,
+        "name": "User 2"
+    }
+]
+
+Get all user + paing (Query string parameters)
+
++ GET /users
+page=1
+item_per_page=10
+
++ GET /users?page=2&item_per_page=15
++ GET /users?page=2
++ GET /users?item_per_page=15
