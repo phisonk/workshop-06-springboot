@@ -31,6 +31,6 @@ public class UserController {
 
     @PostMapping("/users")
     public UsersResponse createNewUser(@RequestBody NewUserRequest request){
-        return new UsersResponse(0,request.getName() + request.getAge());
+        return new UsersResponse(0,request.getName() + " " + request.getAge());
     }
 }
