@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import javafx.application.Application;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import java.util.List;
 @RestController
 public class UserController {
 
+    @Autowired
+    private UserRepository userRepository;
 
     //http get
     @GetMapping("/users")
@@ -33,7 +36,13 @@ public class UserController {
 
     @PostMapping(path = "/users")
     public UsersResponse createNewUser(@RequestBody NewUserRequest request){
-        return new UsersResponse(0,request.getName() + " " + request.getAge());
+        // Validate input
+        // Create new user into database =>
+        User user = new User();
+        user.setName(request.getName());
+        user.setAge(request.getAge());
+        user = userRepository.save(user);
+        return new UsersResponse(user.getId(), request.getName() + " " + request.getAge());
     }
 
     @PostMapping(path = "/users1")
