@@ -38,7 +38,7 @@ public class UserController {
     @GetMapping("/users/{id}")
     public UsersResponse getUserById(@PathVariable int id){
         Optional<User> user =  userRepository.findById(id);
-        return new UsersResponse(user.get().getId(),user.get().getName());
+        return new UsersResponse(user.get().getId(),user.get().getName(),user.get().getAge());
     }
 
     @PostMapping(path = "/users")
