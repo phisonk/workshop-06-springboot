@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import javafx.application.Application;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,8 +31,13 @@ public class UserController {
         return new UsersResponse(id,"User "+id);
     }
 
-    @PostMapping("/users")
+    @PostMapping(path = "/users")
     public UsersResponse createNewUser(@RequestBody NewUserRequest request){
         return new UsersResponse(0,request.getName() + " " + request.getAge());
+    }
+
+    @PostMapping(path = "/users1")
+    public String createNewUserWithFormData(NewUserRequest request){
+        return request.getName() + request.getAge();
     }
 }
