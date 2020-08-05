@@ -2,6 +2,11 @@ package com.example.demo;
 
 import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +24,18 @@ public class UserController {
     //http get
     @GetMapping("/users")
     public PagingResponse getAllUser(
-            @RequestParam(required = true,defaultValue = "1",name = "page") int page,
+            @RequestParam(required = true,defaultValue = "0",name = "page") int page,
             @RequestParam(required = true,defaultValue = "10",name = "item_per_page") int itemPerPage){
         PagingResponse pagingResponse = new PagingResponse(page,itemPerPage);
         List<UsersResponse> usersResponseList = new ArrayList<>();
 
-        Iterable<User> users =  userRepository.findAll();
-        for(User user: users){
+
+        Pageable pageable = PageRequest.of(page, itemPerPage);
+        Page<User> usersPagination = userRepository.findAll(pageable);
+        Iterable<User> users = usersPagination.getContent();
+        for(User user: usersPagination.getContent()){
             usersResponseList.add(new UsersResponse(user.getId(),user.getName()));
         }
-//        for (int i = 1; i < itemPerPage+1; i++) {
-//            usersResponseList.add(new UsersResponse(i+((page-1)*itemPerPage),"User "+((page-1)*itemPerPage)));
-//        }
         pagingResponse.setUsersResponses(usersResponseList);
         return pagingResponse;
     }
