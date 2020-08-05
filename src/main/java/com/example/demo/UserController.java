@@ -13,18 +13,18 @@ import java.util.List;
 public class UserController {
 
 
-    public List<UsersResponse> getAllUser() {
-        return getAllUser(2,10 );
-    }
-
     //http get
     @GetMapping("/users")
-    public List<UsersResponse> getAllUser(@RequestParam(required = true,defaultValue = "2",name = "page") int page,@RequestParam(required = true,defaultValue = "10",name = "item_per_page") int item_per_page){
+    public PagingResponse getAllUser(
+            @RequestParam(required = true,defaultValue = "1",name = "page") int page,
+            @RequestParam(required = true,defaultValue = "10",name = "item_per_page") int itemPerPage){
+        PagingResponse pagingResponse = new PagingResponse(page,itemPerPage);
         List<UsersResponse> users = new ArrayList<>();
-        for (int i = 1; i < item_per_page+1; i++) {
-            users.add(new UsersResponse(i+((page-1)*item_per_page),"User "+((page-1)*item_per_page)));
+        for (int i = 1; i < itemPerPage+1; i++) {
+            users.add(new UsersResponse(i+((page-1)*itemPerPage),"User "+((page-1)*itemPerPage)));
         }
-        return users;
+        pagingResponse.setUsersResponses(users);
+        return pagingResponse;
     }
 
     @GetMapping("/users/{id}")
